@@ -16,6 +16,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".Play5X5Activity"
+            android:parentActivityName=".MainActivity"
+            android:label="5X5 Game"/>
+
     </application>
 
 </manifest>

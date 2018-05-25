@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BattleshipLite</string>
+    <string name="intent_extra_difficulty">difficulty</string>
 </resources>
