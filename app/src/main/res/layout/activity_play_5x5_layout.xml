@@ -28,14 +28,14 @@
                 android:text="Remaining tries:"/>
 
             <TextView
-                android:id="@+id/text_remaining"
+                android:id="@+id/text_remaining_try"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="12dp"
                 android:textColor="#000000"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:text="2" />
+                />
 
         </LinearLayout>
 
@@ -45,7 +45,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="12dp"
-            android:text="SPLASH"
             android:textSize="24sp"
             android:textStyle="bold"/>
 
@@ -291,15 +290,26 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/reset_button"
+        android:id="@+id/button_reset"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="Reset"
+        app:layout_constraintBottom_toTopOf="@+id/button_show_bomb"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_goneMarginBottom="20dp"/>
+
+    <Button
+        android:id="@+id/button_show_bomb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="I Give up!"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginVertical="20dp"/>
+        android:layout_marginBottom="20dp"
+        />
 
 
 

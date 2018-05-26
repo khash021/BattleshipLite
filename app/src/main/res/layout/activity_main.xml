@@ -38,6 +38,47 @@
             android:layout_height="wrap_content"
             android:text="Hard" />
 
+        <RadioButton
+            android:id="@+id/radio_diff_inf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Infinity"/>
+
+
+    </RadioGroup>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:text="Please select the size of the ship" />
+
+    <RadioGroup
+        android:id="@+id/radio_group_ship_size"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radio_ship_size_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1-Grid" />
+
+        <RadioButton
+            android:id="@+id/radio_ship_size_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2-Grid" />
+
+        <RadioButton
+            android:id="@+id/radio_ship_size_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3-Grid" />
+
 
     </RadioGroup>
 
