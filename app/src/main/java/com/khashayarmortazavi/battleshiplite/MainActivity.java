@@ -23,8 +23,6 @@ public class MainActivity extends AppCompatActivity {
     private RadioGroup mRadioGroupDiff, mRadioGroupShipSize;
     private RadioButton mRadioButtEasy, mRadioButtMed, mRadioButtHard, mRadioButtInf, mRadioShip1, mRadioShip2, mRadioShip3;
 
-    private Button mButtonPlay5x5;
-
     private int mDifficulty, mShipSize;
 
     @Override
@@ -53,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
         mDifficulty = 5;
         mShipSize = 2;
 
-        mButtonPlay5x5 = findViewById(R.id.button_play_5x5);
-        mButtonPlay5x5.setOnClickListener(new View.OnClickListener() {
+        Button buttonPlay5x5 = findViewById(R.id.button_play_5x5);
+        buttonPlay5x5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, Play5X5Activity.class);
@@ -65,6 +63,20 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });//mButtonPlay5x5
+
+        Button buttonPlay2Ships = findViewById(R.id.button_play_5x5_2ship);
+        buttonPlay2Ships.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, Play5X5Activity.class);
+                ArrayList<Integer> intentExtras = new ArrayList<>();
+                intentExtras.add(mDifficulty);
+                mShipSize = 100;
+                intentExtras.add(mShipSize);
+                i.putExtra(getString(R.string.intent_extra_difficulty), intentExtras);
+                startActivity(i);
+            }
+        });
 
         mRadioGroupDiff.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override

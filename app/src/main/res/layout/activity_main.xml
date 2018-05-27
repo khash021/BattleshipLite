@@ -89,4 +89,11 @@
         android:text="Pleay 5X5 matrix"
         android:layout_marginTop="150dp"/>
 
+    <Button
+        android:id="@+id/button_play_5x5_2ship"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pleay 5X5 matrix - 2Ships"
+        android:layout_margin="12dp"/>
+
 </LinearLayout>

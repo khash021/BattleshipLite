@@ -9,11 +9,13 @@ import java.util.ArrayList;
  *
  */
 
+//TODO: make methods static static
+
 
 public class Bomb {
 
     int x, y;
-    private ArrayList<Bomb> outputArray = new ArrayList<>();
+    private ArrayList<Bomb> outputArray;
     private int b1x, b1y, b2x, b2y, b3x, b3y;
 
     //default constructor
@@ -35,13 +37,13 @@ public class Bomb {
      * @param index :index to checked
      * @return true is the given index is within bounds of the given array size
      */
-    private boolean inBounds(int size, int index){
+    private static boolean inBounds(int size, int index){
         if (index >= 0 && index < size) {
             return true;
         } else {
             return false;
         }
-    }
+    }//inBounds
 
     /**
      *  Method for creating a single bomb
@@ -61,8 +63,11 @@ public class Bomb {
 
     public ArrayList<Bomb> bomb1(int size){
         Bomb bomb = new Bomb();
+        outputArray = new ArrayList<>();
+
         bomb.x = Bomb.random(size - 1);
         bomb.y = Bomb.random(size - 1);
+
         outputArray.add(bomb);
         return outputArray;
     } //bomb1
@@ -144,6 +149,7 @@ public class Bomb {
     public ArrayList<Bomb> bomb2L (int size) {
         //declaring and initializing variables
         Bomb bomb = new Bomb();
+        outputArray = new ArrayList<>();
 
         //creating the 1st bomb
         bomb.x = Bomb.random(size - 1);
@@ -256,8 +262,10 @@ public class Bomb {
     public ArrayList<Bomb> bomb3L (int size) {
         //declaring and initializing variables
         Bomb bomb = new Bomb();
+        outputArray = new ArrayList<>();
+
         int condition;
-        ArrayList<Bomb> inputArray = bomb.bomb2L(3);
+        ArrayList<Bomb> inputArray = bomb.bomb2L(size);
         b1x = inputArray.get(0).x;
         b1y = inputArray.get(0).y;
         b2x = inputArray.get(1).x;
@@ -366,17 +374,153 @@ public class Bomb {
     public ArrayList<Bomb> ship2 (int size) {
 
         Bomb bomb = new Bomb();
-        int condition;
-        ArrayList<Bomb> firstShipArray = bomb.bomb3L(size);
-        b1x = firstShipArray.get(0).x;
-        b1y = firstShipArray.get(0).y;
-        b2x = firstShipArray.get(1).x;
-        b2y = firstShipArray.get(1).y;
-        for (int i=0; i<2; i++) {
-            outputArray.add(firstShipArray.get(i));
-        }
+        outputArray = new ArrayList<>();
+
+        ArrayList<Bomb> outputArray = bomb.bomb3L(size);
+
+        //create the starting point of our second ship
+        Bomb initialBomb = new Bomb();
+        initialBomb = generateAnother(size, outputArray);
+
+        //now we need to create the last bomb, which should be next to the 4th bomb we just created,
+        //be in bounds, and does not equal to any of the first ship
+        Bomb lastBomb = new Bomb();
+        lastBomb = complete2ndShip(size, initialBomb, outputArray);
+
+        //add the bombs of the last 2-grid ship
+        outputArray.add(initialBomb);
+        outputArray.add(lastBomb);
+
+        return outputArray;
 
     }//ship2
+
+    /**
+     * method for creating the second bomb of a 2L ship given another set of bombs. this new bomb
+     * should meet all of the following criteria:
+     *      it should be linearly next to the first bomb (@param bombInitial), and
+     *      it should be within the bounds of the game matrix, and
+     *      it should not be same as any of the other bombs in the arraylist (shipInitial)
+     * @param size of the gameplay matrix
+     * @param bombInitial the first bomb of this 2-grid ship
+     * @param shipInitial other ships/bombs present in the mattrix
+     * @return
+     */
+    private static Bomb complete2ndShip(int size, Bomb bombInitial, ArrayList<Bomb> shipInitial) {
+
+        Bomb newBomb = new Bomb();
+
+        //create all the possible locations (from 1 to 4 possibilities), and add them to the arrayList.
+        //then randomly select one of those bombs
+        ArrayList<Bomb> possibleBombs = new ArrayList<>();
+
+        //same x, subtract y
+        newBomb.x = bombInitial.x;
+        newBomb.y = bombInitial.y -1;
+        //check to see if it possible
+        if (inBounds(size, bombInitial.y - 1) && !contains(newBomb, shipInitial)) {
+            possibleBombs.add(newBomb);
+        }
+
+        //same x, add y
+        newBomb = new Bomb();
+        newBomb.x = bombInitial.x;
+        newBomb.y = bombInitial.y +1;
+        if (inBounds(size, bombInitial.y + 1) && !contains(newBomb, shipInitial)) {
+            possibleBombs.add(newBomb);
+        }
+
+        //same y, subtract x
+        newBomb = new Bomb();
+        newBomb.y = bombInitial.y;
+        newBomb.x = bombInitial.x - 1;
+        if (inBounds(size, bombInitial.x - 1) && !contains(newBomb, shipInitial)) {
+            possibleBombs.add(newBomb);
+        }
+
+        //same y, add x
+        newBomb = new Bomb();
+        newBomb.y = bombInitial.y;
+        newBomb.x = bombInitial.x + 1;
+        if (inBounds(size, bombInitial.x + 1) && !contains(newBomb, shipInitial)) {
+            possibleBombs.add(newBomb);
+        }
+
+        //now randomly select one of the bombs
+        int random = random(possibleBombs.size());
+
+        return possibleBombs.get(random);
+    }//complete2ndShip
+
+    /**
+     * Method that generates another bomb, given an array of bombs. This new bomb, should not
+     * have the same coordinates as any of the ones in the array
+     * @param size of the game matrix
+     * @param inputArrayList array list of existing bombs
+     * @return single Bomb object
+     */
+    private Bomb generateAnother (int size, ArrayList<Bomb> inputArrayList) {
+        Bomb newBomb = new Bomb();
+
+        boolean satisfactory = false;
+
+        while (!satisfactory) {
+            //generate a new bomb
+            newBomb = generateSingleBomb(size);
+            //check to see if it is same as any of the input bombs
+            if (!contains(newBomb, inputArrayList)) {
+                //we can just return the new bomb from here
+                satisfactory = true;
+            }
+        }//while
+        return newBomb;
+
+    }//generateAnother
+
+    /**
+     * method that checks one bomb object against an arraylist of bombs
+     * @param bomb the bomb to be checked against the list
+     * @param bombArrayList list of bombs
+     * @return true if the list contains that given bomb, false otherwise
+     */
+
+    private static boolean contains (Bomb bomb, ArrayList<Bomb> bombArrayList) {
+        for (Bomb arrayBomb : bombArrayList) {
+            if (equalsTo(arrayBomb, bomb)){
+                return true;
+            }//if
+        }//for
+        return false;
+    }//contains
+
+    /**
+     * Method for comparing two bombs. checks the x and y of the bombs.
+     * @param b1 first bomb object
+     * @param b2 second bomb object
+     * @return true if they have the same coordinates, false otherwise
+     */
+    private static boolean equalsTo(Bomb b1, Bomb b2) {
+
+        if (b1.x == b2.x && b1.y == b2.y) {
+            return true;
+        } else {
+            return false;
+        }
+    }//equalsTo
+
+    /**
+     * Method for generating a single bomb
+     * @param size of the game matrix
+     * @return bomb object
+     */
+    private Bomb generateSingleBomb (int size) {
+        Bomb bomb = new Bomb();
+
+        bomb.x = Bomb.random(size - 1);
+        bomb.y = Bomb.random(size - 1);
+
+        return bomb;
+    }//generateSingleBomb
 
 
 
